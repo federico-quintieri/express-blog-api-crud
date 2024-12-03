@@ -41,3 +41,6 @@ router.delete("/:id", (req, res) => {
 });
 
 // Per elemento si intende dell'array, quindi di un oggetto
+
+// Devo esportare questo router dopo aver specificato tutti i suoi metodi endpoint
+module.exports = router;
