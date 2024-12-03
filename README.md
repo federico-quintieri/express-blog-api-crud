@@ -8,3 +8,7 @@ Se viene chiamata `/posts` col verbo `GET` ci aspettiamo “Lista dei post”;
 Se viene chiamato `/posts/1` col verbo `DELETE` ci aspettiamo “Cancellazione del post 1”
 e via dicendo…
 Registrare il router dentro `app.js` con il prefisso `posts/`.
+
+Bonus:
+- Provare a restituire la lista dei post dalla rotta *index*, in formato `json`
+- Provare a restituire un singolo post dalla rotta *show,* sempre in formato `json`

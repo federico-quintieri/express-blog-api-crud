@@ -7,7 +7,9 @@ const arrRicette = require("../data/ricette");
 
 // index => get => read
 router.get("/", (req, res) => {
-  res.send("Visualizzo tutti gli elementi");
+  // Devo restuire la lista dei post quindi degli oggetti
+  //   res.send("Visualizzo tutti gli elementi");
+  res.json(arrRicette);
 });
 
 // show => get => read
