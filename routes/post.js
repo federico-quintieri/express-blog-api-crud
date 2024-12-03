@@ -14,9 +14,16 @@ router.get("/", (req, res) => {
 
 // show => get => read
 router.get("/:id", (req, res) => {
-  // Accediamo alla nuova proprietà parametro id
-  const ricettaID = req.params.id;
-  res.send("Visualizzo un solo elemento");
+  // Converte l'id in numero intero
+  const ricettaID = parseInt(req.params.id, 10);
+
+  //   res.send("Visualizzo un solo elemento");
+  //   console.log(arrRicette[ricettaID]);
+  //   console.log(ricettaID);
+  //   console.log(arrRicette.length);
+  //   console.log(arrRicette);
+
+  res.json(arrRicette[ricettaID]);
 });
 
 // store => post => create

@@ -34,4 +34,4 @@ const arrayRicette = [
   },
 ];
 
-module.exports = { arrayRicette };
+module.exports = arrayRicette ;
