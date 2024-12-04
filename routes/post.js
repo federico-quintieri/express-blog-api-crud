@@ -1,55 +1,29 @@
 // Importo oggetto/funzione express
 const express = require("express");
+
 // Creo un istanza di Ruoter
 const router = express.Router();
-// Richiamo il mio array di dati
-const arrRicette = require("../data/ricette");
 
-// index => get => read
-router.get("/", (req, res) => {
-  // Devo restuire la lista dei post quindi degli oggetti
-  //   res.send("Visualizzo tutti gli elementi");
-  res.json(arrRicette);
-});
+// Importo il controller ricette
+const controllerRicette = require("../controllers/ricetteController");
 
-// show => get => read
-router.get("/:id", (req, res) => {
-  // Converte l'id in numero intero
-  const ricettaID = parseInt(req.params.id, 10);
+// index => get
+router.get("/", controllerRicette.index);
 
-  //   res.send("Visualizzo un solo elemento");
-  //   console.log(arrRicette[ricettaID]);
-  //   console.log(ricettaID);
-  //   console.log(arrRicette.length);
-  //   console.log(arrRicette);
+// show => get
+router.get("/:id", controllerRicette.show);
 
-  res.json(arrRicette[ricettaID]);
-});
+// store => post
+router.post("/:id", controllerRicette.store);
 
-// store => post => create
-router.post("/:id", (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Creo un nuovo elemento specifico con un nuovo id");
-});
-// update => put => update
-router.put("/:id", (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Modifica totale di un elemento");
-});
+// update => put
+router.put("/:id", controllerRicette.update);
 
-// modify => patch => update
-router.patch("/:id", (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Modifica parziale elemento");
-});
+// modify => patch
+router.patch("/:id", controllerRicette.modify);
 
-// destroy => delete => delete
-router.delete("/:id", (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Elimino un elemento");
-});
+// destroy => delete
+router.delete("/:id", controllerRicette.destroy);
 
-// Per elemento si intende dell'array, quindi di un oggetto
-
-// Devo esportare questo router dopo aver specificato tutti i suoi metodi endpoint
+// Esporto il router
 module.exports = router;
