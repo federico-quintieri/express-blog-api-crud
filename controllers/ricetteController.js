@@ -1,14 +1,25 @@
 // Importiamo il file con l'array di ricette
+const { query } = require("express");
 const ricette = require("../data/ricette");
 
 // callback per index
 const index = (req, res) => {
-  // Prendiamo la query stringa nell'url
-  const queryString = req.query;
-  console.log(queryString);
+  // Prendiamo la query string dall'URL
+  const queryObject = req.query;
+  const chiaveTags = queryObject.tags?.toLowerCase(); // Usa l'optional chaining per evitare errori se `tags` è undefined
 
-  // Mostriamo tutto l'array di ricette
-  res.json(ricette);
+  // Inizializziamo le ricette da inviare con tutte le ricette
+  let ricetteDaInviare = ricette;
+
+  // Applichiamo il filtro solo se `tags` è presente
+  if (chiaveTags) {
+    ricetteDaInviare = ricette.filter(
+      (curRicetta) => curRicetta.tags.toLowerCase() === chiaveTags
+    );
+  }
+
+  // Mostriamo tutto l'array di ricette (filtrate o meno)
+  res.json(ricetteDaInviare);
 };
 
 // callback per show
@@ -18,7 +29,9 @@ const show = (req, res) => {
 
   const elemento = ricette.find((currItem) => currItem.id === ricettaID);
 
-  res.json(elemento);
+  if (elemento === undefined) {
+    res.json(`Stato 404, non esiste id ${ricettaID} in array oggetti`);
+  } else res.json(elemento);
 };
 
 // callback per store
@@ -45,18 +58,23 @@ const destroy = (req, res) => {
   const ricettaID = parseInt(req.params.id, 10);
 
   // Settiamo variabile appoggio
-  let idToDelete = -1;
+  let indexToDelete = -1;
 
   // A noi serve indice array dell'oggetto da cancellare
   ricette.forEach((currObject, currIndex) => {
-    if (currObject.id === ricettaID) idToDelete = currIndex;
+    if (currObject.id === ricettaID) indexToDelete = currIndex;
   });
 
-  // Cancelliamo l'elemento con index idToDelete
-  ricette.splice(idToDelete, 1);
-
-  // Mostriamo l'array dopo aver rimosso un elemento
-  res.send(ricette);
+  if (indexToDelete === -1) {
+    res.json(`Stato 404, non esiste index ${ricettaID} in array oggetti`);
+  }
+  // Altrimenti vuol dire che esiste l'index array da togliere
+  else {
+    // Cancelliamo l'elemento con index idToDelete
+    ricette.splice(idToDelete, 1);
+    // Mostriamo l'array dopo aver rimosso un elemento
+    res.send(ricette);
+  }
 };
 
 module.exports = {

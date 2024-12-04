@@ -1,4 +1,4 @@
-const arrayTag = ["Dolce", "Salato"];
+const arrayTag = ["dolce", "salato"];
 
 // Creo un file seprato l'array di oggetti contenente i dati di ogni dolce.
 const arrayRicette = [
