@@ -1,5 +1,4 @@
 // Importiamo il file con l'array di ricette
-const { query } = require("express");
 const ricette = require("../data/ricette");
 
 // callback per index
@@ -71,7 +70,7 @@ const destroy = (req, res) => {
   // Altrimenti vuol dire che esiste l'index array da togliere
   else {
     // Cancelliamo l'elemento con index idToDelete
-    ricette.splice(idToDelete, 1);
+    ricette.splice(indexToDelete, 1);
     // Mostriamo l'array dopo aver rimosso un elemento
     res.send(ricette);
   }
