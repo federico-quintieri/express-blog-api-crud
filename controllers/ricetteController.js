@@ -1,4 +1,5 @@
 // Importiamo il file con l'array di ricette
+const arrayRicette = require("../data/ricette");
 const ricette = require("../data/ricette");
 
 // callback per index
@@ -35,14 +36,49 @@ const show = (req, res) => {
 
 // callback per store
 const store = (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Creo un nuovo elemento specifico con un nuovo id");
+  // Prendiamo il param dall'url
+  const newRicettaID = parseInt(req.params.id);
+
+  // Mettiamo l'oggetto json preso dal request.body in una variabile di nome objJSON
+  const objJSON = req.body;
+
+  // A questa variabile aggiungiamo una chiave id con valore il param che abbiamo preso prima
+  objJSON.id = newRicettaID;
+
+  // Pusho questo nuovo oggetto nell'array iniziale
+  arrayRicette.push(objJSON);
+
+  // La risposta JSON sarà l'array con il nuovo oggetto
+  res.json(arrayRicette);
 };
 
 // callback per update
 const update = (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Modifica totale di un elemento");
+  // Prendiamo il param dall'url
+  const newRicettaID = parseInt(req.params.id);
+
+  // Mettiamo l'oggetto json preso dal request.body in una variabile di nome objJSON
+  const objJSON = req.body;
+
+  // Aggiunngiamo un id a questo nuovo oggetto
+  objJSON.id = newRicettaID;
+
+  // Troviamo l'index dell'array che ha lo stesso id preso dal param
+  const indexToModify = arrayRicette.findIndex(
+    (currObj) => currObj.id === newRicettaID
+  );
+  // console.log(indexToModify);
+
+  if (indexToModify === -1) {
+    res.status(404).json(`Non esiste oggetto con id ${newRicettaID}`);
+  }
+  // Modifichiamo l'elemento a questo index dell'array con il nuovo oggetto
+  else {
+    arrayRicette[indexToModify] = objJSON;
+
+    // La risposta JSON sarà l'array con il nuovo oggetto
+    res.status(200).json(arrayRicette);
+  }
 };
 
 // callback per modify
