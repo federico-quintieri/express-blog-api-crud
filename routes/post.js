@@ -14,7 +14,7 @@ router.get("/", controllerRicette.index);
 router.get("/:id", controllerRicette.show);
 
 // store => post
-router.post("/:id", controllerRicette.store);
+router.post("/", controllerRicette.store);
 
 // update => put
 router.put("/:id", controllerRicette.update);

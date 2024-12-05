@@ -1,6 +1,5 @@
 // Importiamo il file con l'array di ricette
 const arrayRicette = require("../data/ricette");
-const ricette = require("../data/ricette");
 
 // callback per index
 const index = (req, res) => {
@@ -9,11 +8,11 @@ const index = (req, res) => {
   const chiaveTags = queryObject.tags?.toLowerCase(); // Usa l'optional chaining per evitare errori se `tags` è undefined
 
   // Inizializziamo le ricette da inviare con tutte le ricette
-  let ricetteDaInviare = ricette;
+  let ricetteDaInviare = arrayRicette;
 
   // Applichiamo il filtro solo se `tags` è presente
   if (chiaveTags) {
-    ricetteDaInviare = ricette.filter(
+    ricetteDaInviare = arrayRicette.filter(
       (curRicetta) => curRicetta.tags.toLowerCase() === chiaveTags
     );
   }
@@ -27,7 +26,7 @@ const show = (req, res) => {
   // Converte l'id in numero intero
   const ricettaID = parseInt(req.params.id);
 
-  const elemento = ricette.find((currItem) => currItem.id === ricettaID);
+  const elemento = arrayRicette.find((currItem) => currItem.id === ricettaID);
 
   if (elemento === undefined) {
     res.json(`Stato 404, non esiste id ${ricettaID} in array oggetti`);
@@ -36,17 +35,23 @@ const show = (req, res) => {
 
 // callback per store
 const store = (req, res) => {
-  // Prendiamo il param dall'url
-  const newRicettaID = parseInt(req.params.id);
+  // Prendo oggetto da api json
+  const objApiJSON = req.body;
 
-  // Mettiamo l'oggetto json preso dal request.body in una variabile di nome objJSON
-  const objJSON = req.body;
+  // Prendo ultimo indice dell'array
+  const lastElemIndex = arrayRicette.length - 1;
 
-  // A questa variabile aggiungiamo una chiave id con valore il param che abbiamo preso prima
-  objJSON.id = newRicettaID;
+  // Prendo ultimo oggetto dall'array
+  const lastObject = arrayRicette[lastElemIndex];
+
+  // Prendo id di questo ultimo oggetto
+  const lastObjectid = lastObject.id;
+
+  // Aggiungo proprietà id a oggetto preso da api
+  objApiJSON.id = lastObjectid + 1;
 
   // Pusho questo nuovo oggetto nell'array iniziale
-  arrayRicette.push(objJSON);
+  arrayRicette.push(objApiJSON);
 
   // La risposta JSON sarà l'array con il nuovo oggetto
   res.json(arrayRicette);
@@ -96,7 +101,7 @@ const destroy = (req, res) => {
   let indexToDelete = -1;
 
   // A noi serve indice array dell'oggetto da cancellare
-  ricette.forEach((currObject, currIndex) => {
+  arrayRicette.forEach((currObject, currIndex) => {
     if (currObject.id === ricettaID) indexToDelete = currIndex;
   });
 
@@ -106,9 +111,9 @@ const destroy = (req, res) => {
   // Altrimenti vuol dire che esiste l'index array da togliere
   else {
     // Cancelliamo l'elemento con index idToDelete
-    ricette.splice(indexToDelete, 1);
+    arrayRicette.splice(indexToDelete, 1);
     // Mostriamo l'array dopo aver rimosso un elemento
-    res.send(ricette);
+    res.send(arrayRicette);
   }
 };
 
