@@ -28,9 +28,7 @@ const show = (req, res) => {
 
   const elemento = arrayRicette.find((currItem) => currItem.id === ricettaID);
 
-  if (elemento === undefined) {
-    res.json(`Stato 404, non esiste id ${ricettaID} in array oggetti`);
-  } else res.json(elemento);
+  res.json(elemento);
 };
 
 // callback per store
@@ -74,16 +72,11 @@ const update = (req, res) => {
   );
   // console.log(indexToModify);
 
-  if (indexToModify === -1) {
-    res.status(404).json(`Non esiste oggetto con id ${newRicettaID}`);
-  }
   // Modifichiamo l'elemento a questo index dell'array con il nuovo oggetto
-  else {
-    arrayRicette[indexToModify] = objJSON;
+  arrayRicette[indexToModify] = objJSON;
 
-    // La risposta JSON sarà l'array con il nuovo oggetto
-    res.status(200).json(arrayRicette);
-  }
+  // La risposta JSON sarà l'array con il nuovo oggetto
+  res.status(200).json(arrayRicette);
 };
 
 // callback per modify
@@ -141,16 +134,11 @@ const destroy = (req, res) => {
     if (currObject.id === ricettaID) indexToDelete = currIndex;
   });
 
-  if (indexToDelete === -1) {
-    res.json(`Stato 404, non esiste index ${ricettaID} in array oggetti`);
-  }
-  // Altrimenti vuol dire che esiste l'index array da togliere
-  else {
-    // Cancelliamo l'elemento con index idToDelete
-    arrayRicette.splice(indexToDelete, 1);
-    // Mostriamo l'array dopo aver rimosso un elemento
-    res.send(arrayRicette);
-  }
+  // Cancello un determinato elemento dall'array di oggetti
+  arrayRicette.splice(indexToDelete, 1);
+
+  // Mostriamo l'array dopo aver rimosso un elemento
+  res.send(arrayRicette);
 };
 
 module.exports = {

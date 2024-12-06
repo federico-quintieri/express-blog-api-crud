@@ -6,6 +6,10 @@ const Product = require("./models/product.model.js");
 const app = express();
 const port = 3000;
 
+// Importo la callback per gestire errore request (ritorna callback function)
+const middlewareHandleError = require("./middleware/middlewareError.js");
+// console.log(middlewareHandleError);
+
 // Use JSON parser middleware
 app.use(express.json());
 
@@ -14,6 +18,17 @@ app.use("/Ricette", routing);
 
 // Default endpoint
 app.get("/", (req, res) => res.send("Hello World!"));
+
+// Forzo errore per vedere se il middleware è gestito correttamente
+app.get("/force-error", (req, res, next) => {
+  const error = new Error("Errore interno simulato");
+  error.status = 500;
+  next(error); // Passa l'errore al middleware
+});
+
+// Utilizzo la callback middleware error per gestire errore risposta server
+// Si mette dopo che sono stati specificati i vari endpoint
+app.use(middlewareHandleError);
 
 // Start server
 app.listen(port, () =>
