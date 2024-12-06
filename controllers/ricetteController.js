@@ -88,8 +88,44 @@ const update = (req, res) => {
 
 // callback per modify
 const modify = (req, res) => {
-  const ricettaID = req.params.id;
-  res.send("Modifica parziale elemento");
+  // Prendiamo parametro da request
+  const paramID = parseInt(req.params.id);
+
+  // Prendiamo l'oggetto body dalla request
+  const objApiJSON = req.body;
+
+  // console.log(paramID, objApiJSON);
+
+  // Dobbiamo trovare l'oggetto con lo stesso id di paramID
+  const indexOfObject = arrayRicette.findIndex(
+    (currObject) => currObject.id === paramID
+  );
+
+  // Prendiamo l'oggetto da modificare dall'array
+  const objToModify = arrayRicette[indexOfObject];
+
+  // res.json(objToModify);
+
+  // Facciamo un ciclo for in per ciclare le proprietà dell'oggetto principale
+
+  for (chiave1 in objToModify) {
+    // vediamo se ci prende le chiave dell'oggetto una per una
+    // console.log(chiave1);
+    // Mostriamo il valore di ciascuna chiave una per una
+    // console.log(objToModify[chiave1]);
+
+    // Per ogni chiave cicliamo tutte le chiavi dell'oggetto ottenuto tramite api
+    for (chiave2 in objApiJSON) {
+      // console.log(chiave2);
+      // console.log(objApiJSON[chiave2]);
+      if (chiave1 === chiave2) {
+        // console.log(chiave1, chiave2);
+        // console.log("Ho trovato la chiave da aggiornare");
+        objToModify[chiave1] = objApiJSON[chiave2];
+      }
+    }
+  }
+  res.json(arrayRicette);
 };
 
 // callback per destroy
